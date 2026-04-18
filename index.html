@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Police - Trang chủ</title>
+  <title>Map 18/4</title>
   <style>
     :root {
       color-scheme: dark;
@@ -37,8 +37,8 @@
     .map-section {
       margin: 0 0 28px;
       padding: 24px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.14);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.12);
       border-radius: 24px;
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
     }
@@ -64,32 +64,118 @@
     .map-badge {
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(59, 130, 246, 0.14);
-      color: #7dd3fc;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
       font-size: 0.9rem;
       font-weight: 700;
       white-space: nowrap;
     }
     .map-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.8fr);
+      grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.7fr);
       gap: 18px;
     }
     .map-frame {
       overflow: hidden;
       border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      background:
-        radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 30%),
-        linear-gradient(180deg, #07101f 0%, #020617 100%);
-      min-height: 360px;
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      background: #e8efe7;
+      min-height: 420px;
       position: relative;
     }
     .map-svg {
       display: block;
       width: 100%;
       height: 100%;
-      min-height: 360px;
+      min-height: 420px;
+    }
+    .map-controls {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: grid;
+      gap: 10px;
+      z-index: 2;
+    }
+    .map-control {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: rgba(255, 255, 255, 0.96);
+      color: #0f172a;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    }
+    .map-search {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 86px;
+      min-height: 52px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 18px;
+      z-index: 2;
+    }
+    .map-search strong {
+      color: #0f172a;
+      font-size: 0.98rem;
+    }
+    .map-search span {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .map-watermark {
+      position: absolute;
+      left: 18px;
+      bottom: 12px;
+      z-index: 2;
+      color: #475569;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .map-info-card {
+      position: absolute;
+      left: 18px;
+      bottom: 44px;
+      z-index: 2;
+      width: min(280px, calc(100% - 36px));
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
+    }
+    .map-info-card h3 {
+      margin: 0 0 8px;
+      color: #0f172a;
+      font-size: 1rem;
+    }
+    .map-info-card p {
+      margin: 0 0 10px;
+      color: #64748b;
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+    .map-info-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: #334155;
+      font-size: 0.86rem;
+      font-weight: 600;
     }
     .map-side {
       display: grid;
@@ -97,7 +183,7 @@
       align-content: start;
     }
     .map-card {
-      background: rgba(2, 6, 23, 0.72);
+      background: rgba(15, 23, 42, 0.78);
       border: 1px solid rgba(148, 163, 184, 0.12);
       border-radius: 18px;
       padding: 16px;
@@ -174,93 +260,127 @@
 <body>
   <div class="page">
     <div class="header">
-      <h1>Police</h1>
+      <h1>Map 18/4</h1>
       <p class="description">Chọn thành viên để xem trang riêng trong thư mục tương ứng. Mỗi nút dẫn tới một trang tĩnh trong thư mục Nhân, Khánh, Khải.</p>
     </div>
     <section class="map-section">
       <div class="map-header">
         <div>
-          <h2 class="map-title">Bản đồ điều phối</h2>
-          <p class="map-copy">Bản đồ này được dựng trực tiếp trong giao diện để thể hiện các khu vực điều phối, điểm trực và trục kết nối chính mà không phụ thuộc dịch vụ nhúng bên ngoài.</p>
+          <h2 class="map-title">Map 18/4</h2>
+          <p class="map-copy">Bản đồ được dựng theo phong cách Google Maps với mặt nền sáng, đường sá, sông, nhãn khu vực và cụm điều khiển để nhìn gần với trải nghiệm bản đồ thực tế.</p>
         </div>
-        <span class="map-badge">Bản đồ nội bộ</span>
+        <span class="map-badge">Google Maps style</span>
       </div>
       <div class="map-layout">
         <div class="map-frame">
+          <div class="map-search">
+            <div>
+              <strong>Trung tâm điều phối Police</strong>
+              <span>Khu vực giám sát nội bộ, Thành phố Hồ Chí Minh</span>
+            </div>
+            <span>Chế độ xem bản đồ</span>
+          </div>
+          <div class="map-controls">
+            <div class="map-control">+</div>
+            <div class="map-control">−</div>
+            <div class="map-control">⌖</div>
+          </div>
           <svg class="map-svg" viewBox="0 0 760 420" role="img" aria-label="Bản đồ điều phối nội bộ">
             <defs>
-              <linearGradient id="zoneA" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#0f766e" />
-                <stop offset="100%" stop-color="#0f172a" />
-              </linearGradient>
-              <linearGradient id="zoneB" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#1d4ed8" />
-                <stop offset="100%" stop-color="#172554" />
-              </linearGradient>
-              <linearGradient id="zoneC" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#7c3aed" />
-                <stop offset="100%" stop-color="#1e1b4b" />
-              </linearGradient>
-              <linearGradient id="zoneD" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ea580c" />
-                <stop offset="100%" stop-color="#431407" />
-              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.16"/>
+              </filter>
             </defs>
 
-            <rect x="0" y="0" width="760" height="420" fill="transparent" />
+            <rect x="0" y="0" width="760" height="420" fill="#e7efe6" />
 
-            <path d="M90 86 L250 62 L322 118 L286 198 L132 210 L72 148 Z" fill="url(#zoneA)" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-            <path d="M324 86 L498 76 L590 148 L520 244 L342 224 L286 150 Z" fill="url(#zoneB)" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-            <path d="M146 224 L300 214 L344 330 L192 362 L82 298 Z" fill="url(#zoneC)" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-            <path d="M360 236 L532 250 L640 328 L462 378 L336 338 Z" fill="url(#zoneD)" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+            <path d="M40 112 C104 88, 194 96, 278 132 S466 230, 560 196 690 170, 734 224 L760 240 L760 420 L0 420 L0 156 C10 138, 24 122, 40 112 Z" fill="#dbe9d2" />
+            <path d="M0 286 C84 252, 170 246, 248 268 S412 330, 520 304 682 290, 760 322 L760 420 L0 420 Z" fill="#d5e4ca" opacity="0.9" />
 
-            <path d="M122 154 C214 152, 282 166, 356 192 S522 232, 606 286" fill="none" stroke="#7dd3fc" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
-            <path d="M224 86 C242 144, 254 194, 258 286" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
-            <path d="M430 92 C426 150, 430 214, 436 330" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+            <path d="M78 42 C118 72, 154 120, 180 188 S234 316, 330 350" fill="none" stroke="#99d4ef" stroke-width="26" stroke-linecap="round" opacity="0.95"/>
+            <path d="M82 48 C122 78, 158 124, 184 190 S238 312, 334 346" fill="none" stroke="#7bc2e6" stroke-width="14" stroke-linecap="round"/>
 
-            <g>
-              <circle cx="256" cy="184" r="14" fill="#f8fafc" />
-              <circle cx="256" cy="184" r="8" fill="#2563eb" />
-              <text x="278" y="189" fill="#f8fafc" font-size="16" font-family="Segoe UI, sans-serif">Trung tâm chỉ huy</text>
+            <path d="M18 232 C102 210, 208 206, 326 210 S530 230, 742 220" fill="none" stroke="#f8d976" stroke-width="18" stroke-linecap="round"/>
+            <path d="M18 232 C102 210, 208 206, 326 210 S530 230, 742 220" fill="none" stroke="#fff7c7" stroke-width="10" stroke-linecap="round"/>
+
+            <path d="M292 16 C314 92, 322 182, 314 402" fill="none" stroke="#f3cf66" stroke-width="16" stroke-linecap="round"/>
+            <path d="M292 16 C314 92, 322 182, 314 402" fill="none" stroke="#fff7c7" stroke-width="8" stroke-linecap="round"/>
+
+            <path d="M468 26 C458 96, 456 168, 472 272 S522 390, 566 420" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+            <path d="M468 26 C458 96, 456 168, 472 272 S522 390, 566 420" fill="none" stroke="#d9dee7" stroke-width="6" stroke-linecap="round"/>
+
+            <path d="M108 332 C168 298, 248 292, 336 306 S500 348, 618 338" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+            <path d="M108 332 C168 298, 248 292, 336 306 S500 348, 618 338" fill="none" stroke="#d9dee7" stroke-width="5" stroke-linecap="round"/>
+
+            <path d="M534 86 C588 130, 628 184, 646 250" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+            <path d="M534 86 C588 130, 628 184, 646 250" fill="none" stroke="#d9dee7" stroke-width="5" stroke-linecap="round"/>
+
+            <g opacity="0.75">
+              <path d="M88 140 L164 132" stroke="#a7b5ab" stroke-width="2" />
+              <path d="M198 116 L254 126" stroke="#a7b5ab" stroke-width="2" />
+              <path d="M390 112 L436 86" stroke="#a7b5ab" stroke-width="2" />
+              <path d="M548 298 L624 282" stroke="#a7b5ab" stroke-width="2" />
+              <path d="M404 330 L450 360" stroke="#a7b5ab" stroke-width="2" />
             </g>
-            <g>
-              <circle cx="170" cy="130" r="10" fill="#34d399" />
-              <text x="188" y="135" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif">Khu Bắc</text>
+
+            <g filter="url(#softShadow)">
+              <path d="M338 184 C338 162, 354 146, 376 146 C398 146, 414 162, 414 184 C414 214, 376 244, 376 244 C376 244, 338 214, 338 184 Z" fill="#ef4444"/>
+              <circle cx="376" cy="184" r="14" fill="#ffffff"/>
+              <circle cx="376" cy="184" r="7" fill="#ef4444"/>
             </g>
-            <g>
-              <circle cx="470" cy="146" r="10" fill="#60a5fa" />
-              <text x="488" y="151" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif">Khu Đông</text>
+
+            <g filter="url(#softShadow)">
+              <path d="M532 246 C532 229, 544 216, 561 216 C578 216, 590 229, 590 246 C590 268, 561 290, 561 290 C561 290, 532 268, 532 246 Z" fill="#3b82f6"/>
+              <circle cx="561" cy="246" r="10" fill="#ffffff"/>
+              <circle cx="561" cy="246" r="5" fill="#3b82f6"/>
             </g>
-            <g>
-              <circle cx="198" cy="294" r="10" fill="#a78bfa" />
-              <text x="216" y="299" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif">Khu Nam</text>
+
+            <g filter="url(#softShadow)">
+              <path d="M206 262 C206 247, 216 236, 231 236 C246 236, 256 247, 256 262 C256 282, 231 300, 231 300 C231 300, 206 282, 206 262 Z" fill="#22c55e"/>
+              <circle cx="231" cy="262" r="9" fill="#ffffff"/>
+              <circle cx="231" cy="262" r="4.5" fill="#22c55e"/>
             </g>
-            <g>
-              <circle cx="486" cy="314" r="10" fill="#fb923c" />
-              <text x="504" y="319" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif">Khu Tây</text>
-            </g>
+
+            <text x="392" y="136" fill="#334155" font-size="15" font-family="Segoe UI, sans-serif" font-weight="700">Trung tâm chỉ huy</text>
+            <text x="578" y="241" fill="#334155" font-size="14" font-family="Segoe UI, sans-serif">Điểm trực phía Đông</text>
+            <text x="248" y="260" fill="#334155" font-size="14" font-family="Segoe UI, sans-serif">Chốt kiểm soát Nam</text>
+
+            <text x="112" y="96" fill="#5f6f61" font-size="18" font-family="Segoe UI, sans-serif" font-weight="600">Khu dân cư Bắc</text>
+            <text x="500" y="122" fill="#5f6f61" font-size="18" font-family="Segoe UI, sans-serif" font-weight="600">Khu hành chính Đông</text>
+            <text x="490" y="364" fill="#5f6f61" font-size="18" font-family="Segoe UI, sans-serif" font-weight="600">Khu hậu cần Tây Nam</text>
+            <text x="62" y="194" fill="#3b82f6" font-size="15" font-family="Segoe UI, sans-serif" font-weight="700">Sông nội đô</text>
+            <text x="490" y="206" fill="#7c6b2d" font-size="15" font-family="Segoe UI, sans-serif" font-weight="700">Đại lộ điều phối</text>
           </svg>
+          <div class="map-info-card">
+            <h3>Police Control Center</h3>
+            <p>Điểm điều phối trung tâm kết nối các chốt trực chính, tuyến đường ưu tiên và khu giám sát lân cận.</p>
+            <div class="map-info-meta">
+              <span>Mở cửa 24/7</span>
+              <span>Ưu tiên phản ứng nhanh</span>
+            </div>
+          </div>
+          <div class="map-watermark">Bản đồ mô phỏng nội bộ</div>
         </div>
         <div class="map-side">
           <div class="map-card">
-            <h3>Phân khu vận hành</h3>
-            <p>Bản đồ riêng hiển thị 4 khu điều phối chính, một trung tâm chỉ huy và các trục di chuyển ưu tiên giữa các khu vực.</p>
+            <h3>Phong cách hiển thị</h3>
+            <p>Khối bản đồ đã được dựng theo ngôn ngữ thị giác gần với Google Maps: mặt nền sáng, đường màu phân cấp, marker nổi và thẻ thông tin nổi trên bản đồ.</p>
           </div>
           <div class="map-card">
             <h3>Chú thích</h3>
             <div class="map-legend">
-              <span class="legend-item"><span class="legend-dot" style="background:#34d399;"></span>Khu Bắc</span>
-              <span class="legend-item"><span class="legend-dot" style="background:#60a5fa;"></span>Khu Đông</span>
-              <span class="legend-item"><span class="legend-dot" style="background:#a78bfa;"></span>Khu Nam</span>
-              <span class="legend-item"><span class="legend-dot" style="background:#fb923c;"></span>Khu Tây</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span>Trung tâm chỉ huy</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#3b82f6;"></span>Điểm trực</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#22c55e;"></span>Chốt kiểm soát</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#7bc2e6;"></span>Sông nội đô</span>
             </div>
           </div>
           <div class="map-card">
-            <h3>Điểm nhấn giao diện</h3>
+            <h3>Giới hạn hiện tại</h3>
             <ul>
-              <li>Không phụ thuộc iframe hoặc dịch vụ bản đồ bên ngoài.</li>
-              <li>Dễ chỉnh sửa màu, nhãn và khu vực trực tiếp trong mã HTML.</li>
-              <li>Phù hợp để phát triển thành dashboard theo dõi nội bộ.</li>
+              <li>Đây là bản đồ mô phỏng giao diện, chưa phải bản đồ địa lý thật có zoom/pan dữ liệu thật.</li>
+              <li>Muốn giống Google Maps thật hơn cần tích hợp API bản đồ hoặc dữ liệu tile bên ngoài.</li>
+              <li>Phần hiện tại phù hợp để demo giao diện hoặc dashboard nội bộ tĩnh.</li>
             </ul>
           </div>
         </div>
