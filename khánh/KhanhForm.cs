@@ -85,7 +85,7 @@ namespace WinFormsApp
             {
                 Text = "Quay lại",
                 Size = new Size(120, 40),
-                Location = new Point(230, 505),
+                Location = new Point(370, 505),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
                 ForeColor = Color.FromArgb(70, 70, 70),
@@ -95,6 +95,29 @@ namespace WinFormsApp
             backButton.FlatAppearance.BorderSize = 1;
             backButton.FlatAppearance.BorderColor = Color.FromArgb(210, 210, 210);
             backButton.Click += (s, e) => Close();
+
+            var whitePageButton = new Button
+            {
+                Text = "Trang trắng mới",
+                Size = new Size(140, 40),
+                Location = new Point(220, 505),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(34, 34, 34),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            whitePageButton.FlatAppearance.BorderSize = 1;
+            whitePageButton.FlatAppearance.BorderColor = Color.FromArgb(210, 210, 210);
+            whitePageButton.Click += (s, e) =>
+            {
+                var blankPage = new KhanhBlankForm
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.CenterScreen
+                };
+                blankPage.Show();
+            };
 
             lblStatus.AutoSize = false;
             lblStatus.Location = new Point(40, 495);
@@ -137,6 +160,7 @@ namespace WinFormsApp
             canvas.Controls.Add(formPanel);
             canvas.Controls.Add(listPanel);
             canvas.Controls.Add(registerButton);
+            canvas.Controls.Add(whitePageButton);
             canvas.Controls.Add(backButton);
             canvas.Controls.Add(lblStatus);
         }
@@ -265,6 +289,55 @@ namespace WinFormsApp
             public string Username { get; }
 
             public string Role { get; }
+        }
+    }
+
+    public class KhanhBlankForm : Form
+    {
+        public KhanhBlankForm()
+        {
+            Text = "Trang trắng mới";
+            ClientSize = new Size(720, 500);
+            BackColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+
+            var title = new Label
+            {
+                Text = "Trang trắng mới",
+                AutoSize = true,
+                Font = new Font("Segoe UI", 24, FontStyle.Bold),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                Location = new Point(36, 34)
+            };
+
+            var subtitle = new Label
+            {
+                Text = "Trang này đang để trống để bạn bổ sung nội dung tiếp theo.",
+                AutoSize = true,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                ForeColor = Color.FromArgb(120, 120, 120),
+                Location = new Point(38, 84)
+            };
+
+            var backButton = new Button
+            {
+                Text = "Quay lại",
+                Size = new Size(120, 40),
+                Location = new Point(38, 430),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(60, 60, 60),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            backButton.FlatAppearance.BorderSize = 1;
+            backButton.FlatAppearance.BorderColor = Color.FromArgb(210, 210, 210);
+            backButton.Click += (s, e) => Close();
+
+            Controls.Add(title);
+            Controls.Add(subtitle);
+            Controls.Add(backButton);
         }
     }
 }
