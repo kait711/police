@@ -18,6 +18,14 @@
     textarea, input { width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid #29456f; background: #08111d; color: white; font: inherit; }
     textarea { min-height: 140px; resize: vertical; }
     .row { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }
+    .stats-grid { margin-top: 20px; display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .metric { display: flex; justify-content: space-between; align-items: center; color: #9ec5ff; margin-bottom: 8px; font-size: 0.92rem; }
+    .bar { height: 10px; border-radius: 999px; background: #0a1627; border: 1px solid #1f3d67; overflow: hidden; }
+    .bar > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #0ea5e9, #22d3ee); }
+    .trend-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    .trend-list li { padding: 12px 14px; border-radius: 14px; background: #0b1728; border: 1px solid #1f3d67; display: flex; justify-content: space-between; align-items: center; }
+    .trend-up { color: #4ade80; font-weight: 700; }
+    .trend-down { color: #fb7185; font-weight: 700; }
     .action { margin-top: 14px; background: #06b6d4; color: white; }
     @media (max-width: 800px) { .row { grid-template-columns: 1fr; } }
   </style>
@@ -49,6 +57,26 @@
         <input type="text" value="Cảnh báo giao thông khu vực trung tâm" />
         <textarea>Cập nhật tình hình hiện trường và hướng dẫn người dân đi lại an toàn.</textarea>
         <button class="btn action">Đăng tin</button>
+      </section>
+    </div>
+    <div class="stats-grid">
+      <section class="panel">
+        <h2>Thống kê bài đăng theo chủ đề</h2>
+        <div class="metric"><span>An ninh trật tự</span><strong>78 bài</strong></div>
+        <div class="bar"><span style="width: 82%"></span></div>
+        <div class="metric"><span>Giao thông</span><strong>61 bài</strong></div>
+        <div class="bar"><span style="width: 64%"></span></div>
+        <div class="metric"><span>Cảnh báo lừa đảo</span><strong>44 bài</strong></div>
+        <div class="bar"><span style="width: 46%"></span></div>
+      </section>
+      <section class="panel">
+        <h2>Hiệu suất bài viết 7 ngày</h2>
+        <ul class="trend-list">
+          <li><span>Lượt xem trung bình</span><strong>12.840</strong></li>
+          <li><span>Tỉ lệ tương tác</span><strong class="trend-up">+18.5%</strong></li>
+          <li><span>Tỉ lệ báo xấu</span><strong class="trend-down">-4.2%</strong></li>
+          <li><span>Bài đăng nổi bật</span><strong>Cảnh báo giả danh CA</strong></li>
+        </ul>
       </section>
     </div>
   </div>
