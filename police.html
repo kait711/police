@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cảnh sát - Trung tâm điều hành</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.css" rel="stylesheet" />
   <style>
     :root {
       color-scheme: dark;
@@ -310,6 +311,61 @@
       background: #d6d6d6;
     }
 
+    #incidentMap {
+      width: 100%;
+      height: 470px;
+    }
+
+    .mapboxgl-canvas {
+      outline: none;
+    }
+
+    .mapboxgl-ctrl-bottom-left,
+    .mapboxgl-ctrl-bottom-right {
+      filter: saturate(0.9);
+    }
+
+    .incident-marker {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 0 0 10px rgba(255, 55, 71, 0.12);
+    }
+
+    .incident-marker.high {
+      background: #ff3747;
+      animation: pulse 1.8s infinite;
+    }
+
+    .incident-marker.medium {
+      background: #ff9f0a;
+      box-shadow: 0 0 0 8px rgba(255, 159, 10, 0.12);
+    }
+
+    .incident-marker.low {
+      background: #10c75a;
+      box-shadow: 0 0 0 8px rgba(16, 199, 90, 0.12);
+    }
+
+    .map-popup {
+      color: #1c2434;
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .map-popup strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 55, 71, 0.4); }
+      70% { box-shadow: 0 0 0 14px rgba(255, 55, 71, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 55, 71, 0); }
+    }
+
     .map-watermark {
       position: absolute;
       inset: 0;
@@ -609,17 +665,11 @@
         <div class="panel">
           <div class="panel-head">
             <h2>Bản đồ vụ việc</h2>
-            <span class="panel-note">Sử dụng bản đồ từ geojson.io</span>
+            <span class="panel-note">Sử dụng bản đồ Mapbox</span>
           </div>
 
           <div class="map-wrap">
-            <iframe
-              class="map-frame"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=107.15%2C12.70%2C109.85%2C14.60&layer=mapnik&marker=13.664%2C108.506"
-              title="Bản đồ vụ việc OpenStreetMap"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+            <div class="map-frame" id="incidentMap" aria-label="Bản đồ vụ việc Mapbox"></div>
             <div class="map-watermark">CẢNH SÁT<br>NHÂN DÂN</div>
             <div class="map-badge">✩</div>
 
@@ -632,7 +682,7 @@
           </div>
 
           <div class="map-actions">
-            <a class="map-link" href="https://www.openstreetmap.org/?mlat=13.664&mlon=108.506#map=6/13.664/108.506" target="_blank" rel="noopener noreferrer">Mở bản đồ lớn</a>
+            <a class="map-link" href="https://www.mapbox.com/" target="_blank" rel="noopener noreferrer">Mở Mapbox</a>
             <a class="map-link secondary" href="index.html">Về đăng nhập</a>
           </div>
         </div>
@@ -693,6 +743,7 @@
     </main>
   </div>
 
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.js"></script>
   <script>
     if (sessionStorage.getItem("policeRole") !== "police") {
       window.location.href = "index.html";
@@ -705,6 +756,60 @@
     const checkoutButton = document.getElementById("checkoutButton");
     const callStationButton = document.getElementById("callStationButton");
     const logoutButton = document.getElementById("logoutButton");
+
+    function initMap() {
+      if (typeof mapboxgl === "undefined") {
+        return;
+      }
+
+      mapboxgl.accessToken = "YOUR_MAPBOX_TOKEN";
+
+      const map = new mapboxgl.Map({
+        container: "incidentMap",
+        style: "mapbox://styles/mapbox/dark-v11",
+        center: [108.506, 13.664],
+        zoom: 6.13,
+        pitch: 20,
+        bearing: -6
+      });
+
+      map.addControl(new mapboxgl.NavigationControl(), "top-left");
+
+      const incidents = [
+        {
+          level: "high",
+          coords: [106.7009, 10.7769],
+          title: "Cướp giật tài sản",
+          detail: "Quận 1, TP.HCM. Mức độ cao, cần đội gần nhất tiếp cận."
+        },
+        {
+          level: "medium",
+          coords: [108.2062, 16.0471],
+          title: "Va chạm giao thông",
+          detail: "Đà Nẵng. Đang điều phối luồng giao thông."
+        },
+        {
+          level: "low",
+          coords: [105.8342, 21.0278],
+          title: "Hỗ trợ dân sự",
+          detail: "Hà Nội. Yêu cầu xác minh và hướng dẫn người dân."
+        }
+      ];
+
+      incidents.forEach((incident) => {
+        const markerNode = document.createElement("div");
+        markerNode.className = `incident-marker ${incident.level}`;
+
+        new mapboxgl.Marker(markerNode)
+          .setLngLat(incident.coords)
+          .setPopup(
+            new mapboxgl.Popup({ offset: 18 }).setHTML(
+              `<div class="map-popup"><strong>${incident.title}</strong>${incident.detail}</div>`
+            )
+          )
+          .addTo(map);
+      });
+    }
 
     function updateClock() {
       const now = new Date();
@@ -735,6 +840,7 @@
     });
 
     updateClock();
+    initMap();
     setInterval(updateClock, 1000);
   </script>
 </body>
