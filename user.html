@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Người dùng</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: #190d18; color: #fff1f2; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; }
+    .top { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 2.4rem; }
+    .btn { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer; }
+    .logout { background: #ef4444; color: white; }
+    .row { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }
+    .panel { background: #2a1626; border: 1px solid #563350; border-radius: 24px; padding: 22px; }
+    .panel h2 { margin-top: 0; }
+    input, textarea { width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid #71466d; background: #170d16; color: white; font: inherit; }
+    textarea { min-height: 140px; resize: vertical; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+    .primary { background: #fb7185; color: white; }
+    .danger { background: #dc2626; color: white; }
+    .secondary { background: #334155; color: white; }
+    @media (max-width: 800px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <p>Vai trò: Người dùng</p>
+        <h1>Xem tin tức và báo cáo vụ án</h1>
+      </div>
+      <button class="btn logout" id="logoutButton">Đăng xuất</button>
+    </div>
+    <div class="row">
+      <section class="panel">
+        <h2>Tin tức mới</h2>
+        <p>Cảnh báo trộm cắp khu dân cư Quận 5.</p>
+        <p>Điều chỉnh phân luồng giờ cao điểm tại Quận 1.</p>
+        <p>Khuyến nghị an toàn dịp lễ toàn thành phố.</p>
+      </section>
+      <section class="panel">
+        <h2>Báo cáo vụ án</h2>
+        <input type="text" value="Mất cắp tài sản" />
+        <input type="text" value="10.7769, 106.7009" />
+        <textarea>Mô tả ngắn tình huống và dấu hiệu nhận diện.</textarea>
+        <div class="actions">
+          <button class="btn secondary">Lấy tọa độ hiện tại</button>
+          <button class="btn danger">Gọi cảnh sát</button>
+          <button class="btn primary">Gửi báo cáo</button>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script>
+    if (sessionStorage.getItem("policeRole") !== "user") {
+      window.location.href = "index.html";
+    }
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      sessionStorage.removeItem("policeRole");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

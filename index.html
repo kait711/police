@@ -3,163 +3,352 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Map 18/4</title>
+  <title>Đăng nhập hệ thống cảnh sát</title>
   <style>
     :root {
       color-scheme: dark;
-      background: #0b1220;
-      color: #e2e8f0;
+      --bg-1: #06101f;
+      --bg-2: #0f2747;
+      --panel: rgba(7, 17, 34, 0.88);
+      --panel-line: rgba(140, 180, 255, 0.16);
+      --text: #e8eef7;
+      --muted: #9eb1c9;
+      --accent: #23b5d3;
+      --danger: #ff6b6b;
+      --ok: #7ae582;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
       display: grid;
       place-items: center;
       padding: 24px;
-      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 32%),
-                  radial-gradient(circle at bottom right, rgba(96, 165, 250, 0.14), transparent 28%),
-                  linear-gradient(180deg, #020617 0%, #0b1122 100%);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(35, 181, 211, 0.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(72, 149, 239, 0.18), transparent 32%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
     }
-    .page {
-      width: min(980px, 100%);
-      background: rgba(8, 15, 30, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-      border-radius: 28px;
-      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.32);
-      padding: 40px;
+
+    .shell {
+      width: min(1040px, 100%);
+      display: grid;
+      grid-template-columns: minmax(320px, 480px) minmax(320px, 1fr);
+      gap: 24px;
     }
-    .header { max-width: 720px; margin: 0 auto 32px; }
-    h1 { margin: 0 0 16px; font-size: clamp(2.6rem, 4vw, 4rem); letter-spacing: -0.04em; }
-    p.description { margin: 0; font-size: 1.05rem; color: #cbd5e1; line-height: 1.8; }
-    .map-section {
-      margin: 0 0 28px;
-      padding: 24px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 24px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-line);
+      border-radius: 30px;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(18px);
     }
-    .map-header {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .map-title {
-      margin: 0 0 8px;
-      font-size: 1.45rem;
-      color: #f8fafc;
-    }
-    .map-copy {
-      margin: 0;
-      color: #94a3b8;
-      line-height: 1.7;
-      max-width: 680px;
-    }
-    .map-badge {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(59, 130, 246, 0.14);
-      color: #7dd3fc;
-      font-size: 0.9rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .map-frame {
-      overflow: hidden;
-      border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      background: #020617;
-    }
-    .map-frame iframe {
-      display: block;
-      width: 100%;
-      height: 420px;
-      border: 0;
-    }
-    .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .card {
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 22px;
-      padding: 28px;
-      min-height: 220px;
+
+    .hero {
+      padding: 36px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      gap: 28px;
     }
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(96, 165, 250, 0.4);
-      background: rgba(30, 41, 59, 0.98);
-    }
-    .card-title { margin: 0; font-size: 1.75rem; color: #f8fafc; }
-    .card-subtitle { margin: 12px 0 0; color: #94a3b8; line-height: 1.6; flex: 1; }
-    .card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 24px;
-      color: #7dd3fc;
+
+    .eyebrow {
+      margin: 0;
+      color: #7ed7e6;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
       font-weight: 700;
     }
-    .card-link::after { content: '→'; font-size: 1rem; }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+
+    .lead {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.8;
+      max-width: 34rem;
+    }
+
+    .role-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .role-card {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(14, 28, 52, 0.92);
+      border: 1px solid rgba(140, 180, 255, 0.12);
+    }
+
+    .role-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 1.02rem;
+    }
+
+    .role-card span {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+
+    .login-card {
+      padding: 36px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .login-card h2 {
+      font-size: 1.8rem;
+      letter-spacing: -0.03em;
+    }
+
+    .helper {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(140, 180, 255, 0.14);
+      background: rgba(2, 8, 18, 0.92);
+      color: #ffffff;
+      font: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      border-color: rgba(35, 181, 211, 0.7);
+      box-shadow: 0 0 0 4px rgba(35, 181, 211, 0.16);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 6px;
+    }
+
+    button {
+      min-width: 150px;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, #23b5d3, #2979ff);
+      box-shadow: 0 18px 34px rgba(41, 121, 255, 0.22);
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .ghost {
+      background: rgba(18, 32, 58, 0.95);
+      color: #cfe3fb;
+      box-shadow: none;
+      border: 1px solid rgba(140, 180, 255, 0.14);
+    }
+
+    .status {
+      min-height: 24px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.success {
+      color: var(--ok);
+    }
+
+    .account-box {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(14, 28, 52, 0.92);
+      border: 1px solid rgba(140, 180, 255, 0.12);
+    }
+
+    .account-box h3 {
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    .account-box ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .account-box li {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    code {
+      color: #ffffff;
+      font-family: Consolas, monospace;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="header">
-      <h1>Map 18/4</h1>
-      <p class="description">Chọn thành viên để xem trang riêng trong thư mục tương ứng. Mỗi nút dẫn tới một trang tĩnh trong thư mục Nhân, Khánh, Khải.</p>
-    </div>
-    <section class="map-section">
-      <div class="map-header">
-        <div>
-          <h2 class="map-title">Map 18/4</h2>
-          <p class="map-copy">Tôi đã đổi bản đồ chính sang khu vực từ link bạn gửi. Phần nhúng này dùng tọa độ `10.0403599, 105.4505361` với mức zoom gần tương đương liên kết Google Maps gốc.</p>
-        </div>
-        <span class="map-badge">Google Maps</span>
+  <main class="shell">
+    <section class="panel hero">
+      <div>
+        <p class="eyebrow">Police Smart System</p>
+        <h1>Đăng nhập để truy cập đúng giao diện nghiệp vụ</h1>
+        <p class="lead">
+          Giao diện mở đầu đã được đổi thành màn hình đăng nhập. Sau khi xác thực đúng tài khoản,
+          hệ thống sẽ chuyển thẳng tới trang tương ứng theo quyền của bạn.
+        </p>
       </div>
-      <div class="map-frame">
-        <iframe
-          src="https://maps.google.com/maps?q=10.0403599,105.4505361&z=8&output=embed"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          allowfullscreen
-          title="Bản đồ khu vực 10.0403599, 105.4505361"
-        ></iframe>
+
+      <div class="role-grid">
+        <div class="role-card">
+          <strong>Admin</strong>
+          <span>Xem báo cáo và cập nhật tin tức cảnh báo cho hệ thống.</span>
+        </div>
+        <div class="role-card">
+          <strong>Người dùng</strong>
+          <span>Xem tin tức, gọi cảnh sát và báo cáo vụ án theo vị trí hiện tại.</span>
+        </div>
+        <div class="role-card">
+          <strong>Cảnh sát</strong>
+          <span>Xem vụ án gần nhất, gọi trụ sở và chấm công ca trực.</span>
+        </div>
+        <div class="role-card">
+          <strong>Nhân viên hỗ trợ</strong>
+          <span>Quan sát, theo dõi và tiếp nhận điện thoại từ tổng đài.</span>
+        </div>
       </div>
     </section>
-    <div class="grid">
-      <a class="card" href="nhân/">
-        <div>
-          <h2 class="card-title">Nhân</h2>
-          <p class="card-subtitle">Xem trang Nhân với thông tin thành viên và liên kết quay về trang chủ.</p>
+
+    <section class="panel login-card">
+      <div>
+        <h2>Đăng nhập hệ thống</h2>
+        <p class="helper">Nhập đúng tài khoản để được chuyển tới giao diện đã phân quyền.</p>
+      </div>
+
+      <form id="loginForm">
+        <label>
+          Tên đăng nhập
+          <input id="username" name="username" type="text" autocomplete="username" placeholder="Ví dụ: admin" />
+        </label>
+
+        <label>
+          Mật khẩu
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" />
+        </label>
+
+        <div class="actions">
+          <button type="submit">Đăng nhập</button>
+          <button class="ghost" type="button" id="fillAdmin">Điền tài khoản mẫu</button>
         </div>
-        <span class="card-link">Mở trang Nhân</span>
-      </a>
-      <a class="card" href="khánh/">
-        <div>
-          <h2 class="card-title">Khánh</h2>
-          <p class="card-subtitle">Xem trang Khánh với nội dung thành viên riêng và điều hướng về Home.</p>
-        </div>
-        <span class="card-link">Mở trang Khánh</span>
-      </a>
-      <a class="card" href="khải/">
-        <div>
-          <h2 class="card-title">Khải</h2>
-          <p class="card-subtitle">Xem trang Khải dành riêng cho thành viên, có nút quay về trang chủ.</p>
-        </div>
-        <span class="card-link">Mở trang Khải</span>
-      </a>
-    </div>
-  </div>
+
+        <p id="status" class="status" aria-live="polite"></p>
+      </form>
+
+      <div class="account-box">
+        <h3>Tài khoản mẫu</h3>
+        <ul>
+          <li><code>admin / admin123</code> → Admin</li>
+          <li><code>user / user123</code> → Người dùng</li>
+          <li><code>police / police123</code> → Cảnh sát</li>
+          <li><code>support / support123</code> → Nhân viên hỗ trợ</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const accounts = {
+      admin: { password: "admin123", target: "admin.html" },
+      user: { password: "user123", target: "user.html" },
+      police: { password: "police123", target: "police.html" },
+      support: { password: "support123", target: "support.html" }
+    };
+
+    const form = document.getElementById("loginForm");
+    const statusNode = document.getElementById("status");
+    const fillAdminButton = document.getElementById("fillAdmin");
+
+    function setStatus(message, type) {
+      statusNode.textContent = message;
+      statusNode.className = `status ${type}`;
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const username = form.username.value.trim().toLowerCase();
+      const password = form.password.value;
+      const account = accounts[username];
+
+      if (!account || account.password !== password) {
+        setStatus("Sai tên đăng nhập hoặc mật khẩu.", "error");
+        return;
+      }
+
+      setStatus("Đăng nhập thành công, đang chuyển trang...", "success");
+      sessionStorage.setItem("policeRole", username);
+      window.location.href = account.target;
+    });
+
+    fillAdminButton.addEventListener("click", () => {
+      form.username.value = "admin";
+      form.password.value = "admin123";
+      setStatus("", "");
+    });
+  </script>
 </body>
 </html>
