@@ -3,64 +3,739 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cảnh sát</title>
+  <title>Cảnh sát - Trung tâm điều hành</title>
   <style>
-    body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: #0b1c12; color: #effdf4; }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; }
-    .top { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
-    h1 { margin: 0; font-size: 2.4rem; }
-    .btn { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer; }
-    .logout { background: #ef4444; color: white; }
-    .row { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }
-    .panel { background: #13261a; border: 1px solid #2a5536; border-radius: 24px; padding: 22px; }
-    .panel h2 { margin-top: 0; }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-    .primary { background: #22c55e; color: white; }
-    .warn { background: #facc15; color: #17210f; }
-    textarea { width: 100%; min-height: 130px; margin-top: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid #376f48; background: #0a130d; color: white; font: inherit; }
-    @media (max-width: 800px) { .row { grid-template-columns: 1fr; } }
+    :root {
+      color-scheme: dark;
+      --bg: #071127;
+      --bg-soft: #0d1830;
+      --panel: #202d47;
+      --panel-2: #263654;
+      --line: rgba(130, 160, 220, 0.18);
+      --text: #f5f8ff;
+      --muted: #93a7c8;
+      --blue: #4c98ff;
+      --yellow: #facc15;
+      --green: #22e27a;
+      --purple: #b56cff;
+      --danger: #ff202a;
+      --ok: #09b63e;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(76, 152, 255, 0.12), transparent 26%),
+        linear-gradient(180deg, #030919 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    .sidebar {
+      background: rgba(8, 14, 28, 0.96);
+      border-right: 1px solid rgba(110, 135, 190, 0.12);
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(110, 135, 190, 0.12);
+    }
+
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #1f66ff, #2a8cff);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      font-size: 1.4rem;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .nav-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(16, 24, 44, 0.92);
+      border: 1px solid rgba(110, 135, 190, 0.14);
+    }
+
+    .nav-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+    }
+
+    .nav-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .nav-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(27, 39, 67, 0.96);
+      border: 1px solid rgba(110, 135, 190, 0.14);
+      font-weight: 700;
+      color: #dce7ff;
+    }
+
+    .main {
+      padding: 22px;
+    }
+
+    .header {
+      background: #121d39;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #1f66ff, #2a8cff);
+      font-size: 1.2rem;
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .header-copy {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .icon-dot {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .icon-dot::after {
+      content: "";
+      position: absolute;
+      top: -3px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff4343;
+    }
+
+    .officer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-left: 18px;
+      border-left: 1px solid rgba(110, 135, 190, 0.16);
+    }
+
+    .officer-meta {
+      text-align: right;
+    }
+
+    .officer-meta strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .officer-meta span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .officer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #1f66ff, #2a8cff);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 18px 18px 16px;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.18rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+    }
+
+    .i-blue { color: var(--blue); background: rgba(76, 152, 255, 0.14); }
+    .i-yellow { color: var(--yellow); background: rgba(250, 204, 21, 0.14); }
+    .i-green { color: var(--green); background: rgba(34, 226, 122, 0.14); }
+    .i-purple { color: var(--purple); background: rgba(181, 108, 255, 0.14); }
+
+    .dashboard {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.95fr);
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .panel-note {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .map-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(110, 135, 190, 0.12);
+      background: #d6d6d6;
+      min-height: 470px;
+    }
+
+    .map-frame {
+      width: 100%;
+      height: 470px;
+      border: 0;
+      display: block;
+      background: #d6d6d6;
+    }
+
+    .map-watermark {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: rgba(52, 73, 114, 0.12);
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 4rem);
+    }
+
+    .map-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
+      background: #3450a5;
+      border: 2px solid rgba(255, 204, 0, 0.7);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 28px rgba(0, 0, 0, 0.18);
+      color: #ffd200;
+      font-size: 3rem;
+    }
+
+    .legend {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #1d2638;
+      min-width: 180px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
+    }
+
+    .legend h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 0.96rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.red { background: #ff3747; }
+    .dot.orange { background: #ff9f0a; }
+    .dot.green { background: #10c75a; }
+
+    .side {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .attendance-time {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      min-height: 60px;
+      border: 0;
+      border-radius: 16px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .btn-checkin { background: var(--ok); }
+    .btn-checkout { background: var(--danger); }
+    .btn-primary { background: linear-gradient(135deg, #1f66ff, #2a8cff); }
+    .btn-logout { background: #455a84; }
+
+    .mini-stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: #354766;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .mini-card span {
+      display: block;
+      color: #a8bddf;
+      margin-bottom: 8px;
+      font-size: 0.94rem;
+    }
+
+    .mini-card strong {
+      font-size: 2rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .contact-card {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(105, 49, 71, 0.56);
+      color: #ff7680;
+      text-align: center;
+    }
+
+    .contact-card strong {
+      display: block;
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+    }
+
+    .station {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(110, 135, 190, 0.14);
+    }
+
+    .station span {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .station strong {
+      display: block;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .map-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      background: #314a7c;
+    }
+
+    .map-link.secondary {
+      background: #24304c;
+      color: #d8e4ff;
+    }
+
+    @media (max-width: 1280px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .stats,
+      .dashboard,
+      .buttons,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 18px 20px;
+      }
+
+      .officer {
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div>
-        <p>Vai trò: Cảnh sát</p>
-        <h1>Hiện trường gần nhất và ca trực</h1>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">🛡</div>
+        <div>
+          <p class="brand-title">Hệ thống Quản lý Cảnh sát</p>
+          <p class="brand-subtitle">Bảng điều khiển chuyên nghiệp</p>
+        </div>
       </div>
-      <button class="btn logout" id="logoutButton">Đăng xuất</button>
-    </div>
-    <div class="row">
-      <section class="panel">
-        <h2>Vụ án gần nhất</h2>
-        <p>Mã vụ việc: CASE-240419-17</p>
-        <p>Khoảng cách: 1.2 km</p>
-        <p>Địa điểm: 45 Nguyễn Huệ, Quận 1</p>
-        <p>Mô tả: Tin báo về hành vi giật tài sản, đối tượng di chuyển bằng xe máy màu đen.</p>
-        <div class="actions">
-          <button class="btn primary">Nhận nhiệm vụ</button>
-          <button class="btn primary">Gọi trụ sở</button>
+
+      <div class="nav-card">
+        <h2>Nhiệm vụ hiện tại</h2>
+        <p>Ưu tiên giám sát khu vực trọng điểm, phản ứng nhanh với vụ việc mức độ cao và cập nhật trạng thái ca trực theo thời gian thực.</p>
+      </div>
+
+      <div class="nav-list">
+        <div class="nav-item">Bản đồ vụ việc</div>
+        <div class="nav-item">Chấm công ca trực</div>
+        <div class="nav-item">Liên lạc khẩn cấp</div>
+        <div class="nav-item">Truy cập theo phân quyền</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div class="header-left">
+          <div class="header-logo">🛡</div>
+          <div>
+            <p class="header-title">Hệ thống Quản lý Cảnh sát</p>
+            <p class="header-copy">Trung tâm Điều hành</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="icon-dot" aria-hidden="true"></div>
+          <div class="officer">
+            <div class="officer-meta">
+              <strong>Sĩ quan Nguyễn Văn A</strong>
+              <span>Mã số: CS001</span>
+            </div>
+            <div class="officer-avatar">👮</div>
+          </div>
+        </div>
+      </header>
+
+      <section class="stats">
+        <article class="stat-card">
+          <div class="stat-icon i-blue">△</div>
+          <strong style="color: var(--blue);">12</strong>
+          <span>Vụ việc hôm nay</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon i-yellow">◔</div>
+          <strong style="color: var(--yellow);">5</strong>
+          <span>Đang xử lý</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon i-green">✓</div>
+          <strong style="color: var(--green);">7</strong>
+          <span>Đã giải quyết</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon i-purple">↗</div>
+          <strong style="color: var(--purple);">+15%</strong>
+          <span>Tăng so với hôm qua</span>
+        </article>
+      </section>
+
+      <section class="dashboard">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Bản đồ vụ việc</h2>
+            <span class="panel-note">Sử dụng bản đồ từ geojson.io</span>
+          </div>
+
+          <div class="map-wrap">
+            <iframe
+              class="map-frame"
+              src="https://geojson.io/#map=6.13/13.664/108.506"
+              title="Bản đồ vụ việc geojson.io"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+            <div class="map-watermark">CẢNH SÁT<br>NHÂN DÂN</div>
+            <div class="map-badge">✩</div>
+
+            <div class="legend">
+              <h3>Mức độ nghiêm trọng</h3>
+              <div class="legend-row"><span class="dot red"></span><span>Cao</span></div>
+              <div class="legend-row"><span class="dot orange"></span><span>Trung bình</span></div>
+              <div class="legend-row"><span class="dot green"></span><span>Thấp</span></div>
+            </div>
+          </div>
+
+          <div class="map-actions">
+            <a class="map-link" href="https://geojson.io/#map=6.13/13.664/108.506" target="_blank" rel="noopener noreferrer">Mở bản đồ lớn</a>
+            <a class="map-link secondary" href="index.html">Về đăng nhập</a>
+          </div>
+        </div>
+
+        <div class="side">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Chấm công</h2>
+              <span class="attendance-time" id="clock">12:06</span>
+            </div>
+
+            <div class="buttons">
+              <button class="btn btn-checkin" id="checkinButton">⎋ Vào ca</button>
+              <button class="btn btn-checkout" id="checkoutButton">⇥ Kết thúc ca</button>
+            </div>
+
+            <div class="mini-stats">
+              <div class="mini-card">
+                <span>Có mặt</span>
+                <strong id="presentCount">4</strong>
+              </div>
+              <div class="mini-card">
+                <span>Đang làm việc</span>
+                <strong id="workingCount" style="color: var(--green);">3</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Liên lạc</h2>
+              <span class="panel-note">Khẩn cấp</span>
+            </div>
+
+            <div class="contact-grid">
+              <div class="contact-card">
+                <strong>115</strong>
+                <span>Cứu thương</span>
+              </div>
+              <div class="contact-card">
+                <strong>114</strong>
+                <span>Cứu hỏa</span>
+              </div>
+            </div>
+
+            <div class="station">
+              <span>TRỤ SỞ</span>
+              <strong>45 Nguyễn Huệ, Quận 1<br>Hotline trực ban: 028 3822 9999</strong>
+            </div>
+
+            <div class="map-actions">
+              <button class="btn btn-primary" id="callStationButton">Gọi điện trụ sở</button>
+              <button class="btn btn-logout" id="logoutButton">Đăng xuất</button>
+            </div>
+          </section>
         </div>
       </section>
-      <section class="panel">
-        <h2>Chấm công</h2>
-        <p>Trạng thái ca trực: Chưa chấm công</p>
-        <div class="actions">
-          <button class="btn warn">Chấm công vào ca</button>
-        </div>
-        <h2 style="margin-top:24px;">Ghi chú nhanh</h2>
-        <textarea>Nhập ghi chú tuần tra hoặc kết quả xác minh...</textarea>
-      </section>
-    </div>
+    </main>
   </div>
+
   <script>
     if (sessionStorage.getItem("policeRole") !== "police") {
       window.location.href = "index.html";
     }
-    document.getElementById("logoutButton").addEventListener("click", () => {
+
+    const clockNode = document.getElementById("clock");
+    const presentCount = document.getElementById("presentCount");
+    const workingCount = document.getElementById("workingCount");
+    const checkinButton = document.getElementById("checkinButton");
+    const checkoutButton = document.getElementById("checkoutButton");
+    const callStationButton = document.getElementById("callStationButton");
+    const logoutButton = document.getElementById("logoutButton");
+
+    function updateClock() {
+      const now = new Date();
+      clockNode.textContent = now.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    checkinButton.addEventListener("click", () => {
+      presentCount.textContent = "5";
+      workingCount.textContent = "4";
+      checkinButton.textContent = "✓ Đã vào ca";
+    });
+
+    checkoutButton.addEventListener("click", () => {
+      workingCount.textContent = "2";
+      checkoutButton.textContent = "✓ Đã kết thúc";
+    });
+
+    callStationButton.addEventListener("click", () => {
+      window.alert("Đang kết nối đến trụ sở điều hành.");
+    });
+
+    logoutButton.addEventListener("click", () => {
       sessionStorage.removeItem("policeRole");
       window.location.href = "index.html";
     });
+
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
