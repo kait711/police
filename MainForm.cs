@@ -1,20 +1,11 @@
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace WinFormsApp
 {
     public class MainForm : Form
     {
-        private Panel canvas = null!;
-        private Label titleLabel = null!;
-        private Label subtitleLabel = null!;
-        private Label unitLabel = null!;
-        private Button btnNhan = null!;
-        private Button btnKhanh = null!;
-        private Button btnKhai = null!;
-
         public MainForm()
         {
             InitializeComponent();
@@ -22,154 +13,63 @@ namespace WinFormsApp
 
         private void InitializeComponent()
         {
-            Text = "Ứng dụng cảnh sát";
-            ClientSize = new Size(960, 640);
+            Text = "Hệ thống điều phối cảnh sát";
+            ClientSize = new Size(1180, 760);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            BackColor = Color.FromArgb(8, 18, 34);
 
-            canvas = new Panel
-            {
-                Dock = DockStyle.Fill
-            };
-            canvas.Paint += Canvas_Paint;
-            Controls.Add(canvas);
+            var canvas = UiFactory.CreateCanvas(this, Color.FromArgb(8, 18, 36), Color.FromArgb(18, 42, 76));
 
-            unitLabel = new Label
-            {
-                Text = "POLICE CONTROL",
-                Font = new Font("Segoe UI", 11, FontStyle.Bold),
-                ForeColor = Color.FromArgb(130, 182, 255),
-                BackColor = Color.Transparent,
-                AutoSize = true,
-                Location = new Point(60, 44)
-            };
+            UiFactory.CreateLabel(canvas, "POLICE SMART HUB", 56, 36, 11, FontStyle.Bold, Color.FromArgb(129, 194, 255));
+            UiFactory.CreateLabel(canvas, "Chọn giao diện nghiệp vụ", 54, 72, 28, FontStyle.Bold, Color.White);
+            UiFactory.CreateLabel(
+                canvas,
+                "4 dashboard tách theo vai trò để quản trị, tiếp nhận tin báo và phản ứng hiện trường nhanh.",
+                58,
+                124,
+                11,
+                FontStyle.Regular,
+                Color.FromArgb(210, 220, 235));
 
-            titleLabel = new Label
-            {
-                Text = "TRUNG TÂM ĐIỀU PHỐI",
-                Font = new Font("Segoe UI", 28, FontStyle.Bold),
-                ForeColor = Color.White,
-                BackColor = Color.Transparent,
-                AutoSize = true,
-                Location = new Point(56, 72)
-            };
+            CreateRoleButton(canvas, "Admin", "Xem báo cáo và cập nhật tin tức", new Rectangle(56, 210, 250, 220), Color.FromArgb(0, 172, 193), () => OpenPage(new AdminForm()));
+            CreateRoleButton(canvas, "Người dùng", "Xem tin tức, gọi cảnh sát, báo cáo vụ án", new Rectangle(332, 210, 250, 220), Color.FromArgb(255, 111, 97), () => OpenPage(new UserForm()));
+            CreateRoleButton(canvas, "Cảnh sát", "Hiển thị vụ án gần nhất, gọi trụ sở, chấm công", new Rectangle(608, 210, 250, 220), Color.FromArgb(76, 175, 80), () => OpenPage(new PoliceOfficerForm()));
+            CreateRoleButton(canvas, "Hỗ trợ", "Quan sát, theo dõi và tiếp nhận điện thoại", new Rectangle(884, 210, 250, 220), Color.FromArgb(255, 193, 7), () => OpenPage(new SupportStaffForm()));
 
-            subtitleLabel = new Label
-            {
-                Text = "Chọn cán bộ để truy cập nhanh vào hồ sơ làm việc.",
-                Font = new Font("Segoe UI", 11, FontStyle.Regular),
-                ForeColor = Color.FromArgb(173, 189, 214),
-                BackColor = Color.Transparent,
-                AutoSize = true,
-                Location = new Point(60, 124)
-            };
-
-            btnNhan = CreateOfficerButton("Nhân", "Đơn vị tuần tra", Color.FromArgb(33, 150, 243), 60, 220);
-            btnKhanh = CreateOfficerButton("Khánh", "Đơn vị chỉ huy", Color.FromArgb(255, 193, 7), 330, 220);
-            btnKhai = CreateOfficerButton("Khải", "Đơn vị kỹ thuật", Color.FromArgb(76, 175, 80), 600, 220);
-
-            btnNhan.Click += (s, e) => OpenPage(new NhanForm());
-            btnKhanh.Click += (s, e) => OpenPage(new KhanhForm());
-            btnKhai.Click += (s, e) => OpenPage(new KhaiForm());
-
-            canvas.Controls.Add(unitLabel);
-            canvas.Controls.Add(titleLabel);
-            canvas.Controls.Add(subtitleLabel);
-            canvas.Controls.Add(btnNhan);
-            canvas.Controls.Add(btnKhanh);
-            canvas.Controls.Add(btnKhai);
+            var infoCard = UiFactory.CreateCard(canvas, new Rectangle(56, 480, 1078, 190), Color.FromArgb(10, 24, 46), Color.FromArgb(60, 129, 194, 255));
+            UiFactory.CreateLabel(infoCard, "Luồng xử lý đề xuất", 24, 22, 15, FontStyle.Bold, Color.White);
+            UiFactory.CreateLabel(infoCard, "1. Người dân gửi tin báo có tọa độ hiện tại.", 24, 62, 11, FontStyle.Regular, Color.FromArgb(220, 228, 240));
+            UiFactory.CreateLabel(infoCard, "2. Nhân viên hỗ trợ tiếp nhận cuộc gọi và theo dõi trạng thái.", 24, 92, 11, FontStyle.Regular, Color.FromArgb(220, 228, 240));
+            UiFactory.CreateLabel(infoCard, "3. Cảnh sát nhận vụ gần nhất để điều phối xử lý thực địa.", 24, 122, 11, FontStyle.Regular, Color.FromArgb(220, 228, 240));
+            UiFactory.CreateLabel(infoCard, "4. Admin tổng hợp báo cáo và đăng tin tức cảnh báo cho cộng đồng.", 24, 152, 11, FontStyle.Regular, Color.FromArgb(220, 228, 240));
         }
 
-        private Button CreateOfficerButton(string officerName, string officerRole, Color accentColor, int x, int y)
+        private void CreateRoleButton(Control parent, string title, string subtitle, Rectangle bounds, Color accentColor, Action onClick)
         {
             var button = new Button
             {
-                Size = new Size(240, 260),
-                Location = new Point(x, y),
+                Bounds = bounds,
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(13, 30, 54),
+                BackColor = Color.FromArgb(10, 24, 46),
                 ForeColor = Color.White,
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
                 Cursor = Cursors.Hand,
-                Text = officerName + Environment.NewLine + Environment.NewLine + officerRole,
-                Font = new Font("Segoe UI", 17, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleCenter
+                Text = $"{title}{Environment.NewLine}{Environment.NewLine}{subtitle}"
             };
 
             button.FlatAppearance.BorderColor = accentColor;
             button.FlatAppearance.BorderSize = 2;
-            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(20, 42, 74);
-
+            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(18, 36, 68);
+            button.Click += (s, e) => onClick();
             button.Paint += (s, e) =>
             {
-                var g = e.Graphics;
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-
-                using (var topBrush = new LinearGradientBrush(
-                    new Rectangle(0, 0, button.Width, 6),
-                    accentColor,
-                    Color.Transparent,
-                    LinearGradientMode.Horizontal))
-                {
-                    g.FillRectangle(topBrush, 0, 0, button.Width, 6);
-                }
-
-                using (var badgePen = new Pen(Color.FromArgb(90, accentColor), 2))
-                {
-                    g.DrawEllipse(badgePen, 86, 30, 68, 68);
-                    g.DrawLine(badgePen, 120, 48, 120, 80);
-                    g.DrawLine(badgePen, 104, 64, 136, 64);
-                }
+                using var brush = new SolidBrush(accentColor);
+                e.Graphics.FillRectangle(brush, 0, 0, button.Width, 8);
             };
 
-            return button;
-        }
-
-        private void Canvas_Paint(object? sender, PaintEventArgs e)
-        {
-            var g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            var rect = canvas.ClientRectangle;
-            using (var brush = new LinearGradientBrush(
-                rect,
-                Color.FromArgb(6, 18, 36),
-                Color.FromArgb(14, 34, 63),
-                LinearGradientMode.Vertical))
-            {
-                g.FillRectangle(brush, rect);
-            }
-
-            using (var gridPen = new Pen(Color.FromArgb(18, 120, 170, 220), 1))
-            {
-                for (int x = 0; x < rect.Width; x += 40)
-                {
-                    g.DrawLine(gridPen, x, 0, x, rect.Height);
-                }
-
-                for (int y = 0; y < rect.Height; y += 40)
-                {
-                    g.DrawLine(gridPen, 0, y, rect.Width, y);
-                }
-            }
-
-            using (var haloPen = new Pen(Color.FromArgb(70, 255, 255, 255), 2))
-            {
-                g.DrawEllipse(haloPen, 700, -80, 300, 300);
-                g.DrawEllipse(haloPen, -120, 460, 280, 280);
-            }
-
-            using (var footerBrush = new SolidBrush(Color.FromArgb(150, 170, 190)))
-            using (var footerFont = new Font("Segoe UI", 9, FontStyle.Regular))
-            {
-                g.DrawString(
-                    "Hệ thống nội bộ • Nhân • Khánh • Khải",
-                    footerFont,
-                    footerBrush,
-                    60,
-                    590);
-            }
+            parent.Controls.Add(button);
         }
 
         private void OpenPage(Form page)
