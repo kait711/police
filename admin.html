@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: #071321; color: #eaf2ff; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; }
+    .top { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 2.5rem; }
+    .btn { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer; }
+    .logout { background: #ef4444; color: white; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .card, .panel { background: #0f1c31; border: 1px solid #213555; border-radius: 24px; padding: 22px; }
+    .card strong { display: block; font-size: 2rem; margin-top: 10px; color: #22d3ee; }
+    .panel h2 { margin-top: 0; }
+    textarea, input { width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid #29456f; background: #08111d; color: white; font: inherit; }
+    textarea { min-height: 140px; resize: vertical; }
+    .row { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }
+    .action { margin-top: 14px; background: #06b6d4; color: white; }
+    @media (max-width: 800px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <p>Vai trò: Admin</p>
+        <h1>Quản trị báo cáo và tin tức</h1>
+      </div>
+      <button class="btn logout" id="logoutButton">Đăng xuất</button>
+    </div>
+    <div class="grid">
+      <div class="card">Báo cáo mới<strong>128</strong></div>
+      <div class="card">Tin tức đã đăng<strong>36</strong></div>
+      <div class="card">Cuộc gọi khẩn<strong>21</strong></div>
+      <div class="card">Đội phản ứng<strong>9</strong></div>
+    </div>
+    <div class="row">
+      <section class="panel">
+        <h2>Xem báo cáo</h2>
+        <p>Quận 1: Đã điều phối</p>
+        <p>Quận 3: Đang xác minh</p>
+        <p>Thủ Đức: Chờ xử lý</p>
+      </section>
+      <section class="panel">
+        <h2>Cập nhật tin tức</h2>
+        <input type="text" value="Cảnh báo giao thông khu vực trung tâm" />
+        <textarea>Cập nhật tình hình hiện trường và hướng dẫn người dân đi lại an toàn.</textarea>
+        <button class="btn action">Đăng tin</button>
+      </section>
+    </div>
+  </div>
+  <script>
+    if (sessionStorage.getItem("policeRole") !== "admin") {
+      window.location.href = "index.html";
+    }
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      sessionStorage.removeItem("policeRole");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
